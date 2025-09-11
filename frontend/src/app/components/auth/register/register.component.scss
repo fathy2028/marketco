@@ -1,0 +1,20 @@
+@import '../login/login.component.scss';
+
+.auth-card-container {
+  max-width: 450px;
+}
+
+.field-checkbox {
+  flex-direction: column;
+  align-items: flex-start;
+  
+  label {
+    margin-left: 2rem;
+    margin-top: 0.25rem;
+    line-height: 1.4;
+  }
+}
+
+:host ::ng-deep .p-password .p-password-panel {
+  width: 100%;
+}

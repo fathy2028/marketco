@@ -1,0 +1,105 @@
+<div class="auth-container">
+  <div class="auth-card-container">
+    <p-card class="auth-card">
+      <ng-template pTemplate="header">
+        <div class="auth-header">
+          <div class="flex align-items-center justify-content-center mb-3">
+            <i class="pi pi-shopping-cart text-4xl text-primary mr-3"></i>
+            <h1 class="text-3xl font-bold text-primary m-0">E-commerce</h1>
+          </div>
+          <h2 class="text-center text-2xl font-semibold text-900 m-0">
+            Welcome Back
+          </h2>
+          <p class="text-center text-600 mt-2">
+            Sign in to your account to continue
+          </p>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="content">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+          <div class="field">
+            <label for="username" class="block text-900 font-medium mb-2"
+              >Username</label
+            >
+            <input
+              id="username"
+              type="text"
+              pInputText
+              formControlName="username"
+              placeholder="Enter your username"
+              class="w-full"
+              [class.p-invalid]="isFieldInvalid('username')"
+            />
+            <small
+              *ngIf="isFieldInvalid('username')"
+              class="p-error block mt-1"
+            >
+              {{ getFieldError("username") }}
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="password" class="block text-900 font-medium mb-2"
+              >Password</label
+            >
+            <p-password
+              id="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+              [class.p-invalid]="isFieldInvalid('password')"
+              [feedback]="false"
+              [toggleMask]="true"
+            >
+            </p-password>
+            <small
+              *ngIf="isFieldInvalid('password')"
+              class="p-error block mt-1"
+            >
+              {{ getFieldError("password") }}
+            </small>
+          </div>
+
+          <div class="field-checkbox">
+            <p-checkbox
+              id="rememberMe"
+              formControlName="rememberMe"
+              binary="true"
+            >
+            </p-checkbox>
+            <label for="rememberMe" class="ml-2">Remember me</label>
+          </div>
+
+          <p-button
+            type="submit"
+            label="Sign In"
+            styleClass="w-full"
+            [loading]="loading"
+            [disabled]="!loginForm.valid"
+          >
+          </p-button>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="auth-footer">
+          <p-divider align="center">
+            <span class="text-600 font-normal">or</span>
+          </p-divider>
+
+          <div class="text-center">
+            <span class="text-600">Don't have an account? </span>
+            <a
+              class="font-medium no-underline ml-1 text-primary cursor-pointer"
+              (click)="goToRegister()"
+            >
+              Sign up here
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

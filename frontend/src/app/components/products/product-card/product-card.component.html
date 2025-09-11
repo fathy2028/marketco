@@ -1,0 +1,94 @@
+<p-card
+  class="product-card h-full cursor-pointer"
+  (click)="onProductClick()"
+  [style]="{ opacity: isOutOfStock() ? '0.7' : '1' }"
+>
+  <ng-template pTemplate="header">
+    <div class="product-image-container">
+      <img
+        [src]="product.imageUrl || 'assets/images/product-placeholder.jpg'"
+        [alt]="product.name"
+        class="product-image"
+        onerror="this.src='assets/images/product-placeholder.jpg'"
+      />
+      <div class="product-overlay">
+        <p-button
+          icon="pi pi-eye"
+          [rounded]="true"
+          severity="secondary"
+          [text]="true"
+          class="overlay-button"
+          pTooltip="View Details"
+          tooltipPosition="top"
+        >
+        </p-button>
+      </div>
+      <div class="stock-badge">
+        <p-tag [value]="getStockText()" [severity]="getStockSeverity()">
+        </p-tag>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="product-content">
+      <div class="flex justify-content-between align-items-start mb-2">
+        <h3
+          class="product-title text-lg font-semibold text-900 m-0 line-height-3"
+        >
+          {{ product.name }}
+        </h3>
+        <p-tag [value]="product.category" severity="info" class="ml-2"> </p-tag>
+      </div>
+
+      <p class="product-description text-600 mb-3 line-height-3">
+        {{ product.description | slice : 0 : 100
+        }}{{ product.description.length > 100 ? "..." : "" }}
+      </p>
+
+      <div class="flex justify-content-between align-items-center">
+        <div class="price-container">
+          <span class="price text-2xl font-bold text-primary">
+            ${{ product.price | number : "1.2-2" }}
+          </span>
+        </div>
+
+        <div class="product-actions">
+          <p-button
+            [label]="addingToCart ? 'Adding...' : 'Add to Cart'"
+            icon="pi pi-shopping-cart"
+            [loading]="addingToCart"
+            [disabled]="isOutOfStock() || addingToCart"
+            (click)="addToCart($event)"
+            size="small"
+            class="add-to-cart-btn"
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer" *ngIf="product.stock > 0">
+    <div class="product-footer">
+      <div class="flex align-items-center justify-content-between">
+        <div class="flex align-items-center text-sm text-600">
+          <i class="pi pi-box mr-1"></i>
+          <span>Stock: {{ product.stock }}</span>
+        </div>
+
+        <div class="flex align-items-center text-sm text-600">
+          <p-rating
+            [ngModel]="4.5"
+            [readonly]="true"
+            [cancel]="false"
+            [stars]="5"
+            class="rating-small"
+          >
+          </p-rating>
+          <span class="ml-1">(4.5)</span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-card>

@@ -1,0 +1,74 @@
+<p-menubar [model]="items" styleClass="custom-menubar">
+  <ng-template pTemplate="start">
+    <div
+      class="logo-container"
+      (click)="router.navigate(['/products'])"
+      style="cursor: pointer"
+    >
+      <i class="pi pi-shopping-cart text-2xl text-primary mr-2"></i>
+      <span class="font-bold text-xl text-primary">E-commerce</span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <div class="flex align-items-center gap-3">
+      <!-- Cart Icon with Badge -->
+      <div
+        *ngIf="isAuthenticated"
+        class="cart-badge"
+        (click)="goToCart()"
+        style="cursor: pointer"
+      >
+        <p-button
+          icon="pi pi-shopping-cart"
+          [text]="true"
+          [rounded]="true"
+          severity="secondary"
+          class="relative"
+        >
+        </p-button>
+        <p-badge
+          *ngIf="cartItemCount > 0"
+          [value]="cartItemCount.toString()"
+          severity="danger"
+        >
+        </p-badge>
+      </div>
+
+      <!-- User Menu -->
+      <div *ngIf="isAuthenticated" class="flex align-items-center gap-2">
+        <p-avatar
+          [label]="currentUser?.username?.charAt(0)?.toUpperCase()"
+          shape="circle"
+          size="normal"
+          styleClass="bg-primary"
+        >
+        </p-avatar>
+        <span class="font-medium hidden md:inline">{{
+          currentUser?.username
+        }}</span>
+        <p-button
+          icon="pi pi-sign-out"
+          [text]="true"
+          [rounded]="true"
+          severity="secondary"
+          (click)="logout()"
+          pTooltip="Logout"
+          tooltipPosition="bottom"
+        >
+        </p-button>
+      </div>
+
+      <!-- Login Button -->
+      <div *ngIf="!isAuthenticated">
+        <p-button
+          label="Login"
+          icon="pi pi-sign-in"
+          (click)="goToLogin()"
+          [rounded]="true"
+        >
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-menubar>

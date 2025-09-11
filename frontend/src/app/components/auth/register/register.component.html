@@ -1,0 +1,159 @@
+<div class="auth-container">
+  <div class="auth-card-container">
+    <p-card class="auth-card">
+      <ng-template pTemplate="header">
+        <div class="auth-header">
+          <div class="flex align-items-center justify-content-center mb-3">
+            <i class="pi pi-shopping-cart text-4xl text-primary mr-3"></i>
+            <h1 class="text-3xl font-bold text-primary m-0">E-commerce</h1>
+          </div>
+          <h2 class="text-center text-2xl font-semibold text-900 m-0">
+            Create Account
+          </h2>
+          <p class="text-center text-600 mt-2">
+            Join us for the best shopping experience
+          </p>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="content">
+        <form
+          [formGroup]="registerForm"
+          (ngSubmit)="onSubmit()"
+          class="auth-form"
+        >
+          <div class="field">
+            <label for="username" class="block text-900 font-medium mb-2"
+              >Username</label
+            >
+            <input
+              id="username"
+              type="text"
+              pInputText
+              formControlName="username"
+              placeholder="Choose a username"
+              class="w-full"
+              [class.p-invalid]="isFieldInvalid('username')"
+            />
+            <small
+              *ngIf="isFieldInvalid('username')"
+              class="p-error block mt-1"
+            >
+              {{ getFieldError("username") }}
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="email" class="block text-900 font-medium mb-2"
+              >Email</label
+            >
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              placeholder="Enter your email"
+              class="w-full"
+              [class.p-invalid]="isFieldInvalid('email')"
+            />
+            <small *ngIf="isFieldInvalid('email')" class="p-error block mt-1">
+              {{ getFieldError("email") }}
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="password" class="block text-900 font-medium mb-2"
+              >Password</label
+            >
+            <p-password
+              id="password"
+              formControlName="password"
+              placeholder="Create a password"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+              [class.p-invalid]="isFieldInvalid('password')"
+              [feedback]="true"
+              [toggleMask]="true"
+            >
+            </p-password>
+            <small
+              *ngIf="isFieldInvalid('password')"
+              class="p-error block mt-1"
+            >
+              {{ getFieldError("password") }}
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="confirmPassword" class="block text-900 font-medium mb-2"
+              >Confirm Password</label
+            >
+            <p-password
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              placeholder="Confirm your password"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+              [class.p-invalid]="isFieldInvalid('confirmPassword')"
+              [feedback]="false"
+              [toggleMask]="true"
+            >
+            </p-password>
+            <small
+              *ngIf="isFieldInvalid('confirmPassword')"
+              class="p-error block mt-1"
+            >
+              {{ getFieldError("confirmPassword") }}
+            </small>
+          </div>
+
+          <div class="field-checkbox">
+            <p-checkbox
+              id="agreeTerms"
+              formControlName="agreeTerms"
+              binary="true"
+            >
+            </p-checkbox>
+            <label for="agreeTerms" class="ml-2">
+              I agree to the
+              <a href="#" class="text-primary">Terms and Conditions</a>
+            </label>
+            <small
+              *ngIf="isFieldInvalid('agreeTerms')"
+              class="p-error block mt-1 ml-4"
+            >
+              {{ getFieldError("agreeTerms") }}
+            </small>
+          </div>
+
+          <p-button
+            type="submit"
+            label="Create Account"
+            styleClass="w-full"
+            [loading]="loading"
+            [disabled]="!registerForm.valid"
+          >
+          </p-button>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="auth-footer">
+          <p-divider align="center">
+            <span class="text-600 font-normal">or</span>
+          </p-divider>
+
+          <div class="text-center">
+            <span class="text-600">Already have an account? </span>
+            <a
+              class="font-medium no-underline ml-1 text-primary cursor-pointer"
+              (click)="goToLogin()"
+            >
+              Sign in here
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

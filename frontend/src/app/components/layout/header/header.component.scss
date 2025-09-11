@@ -1,0 +1,46 @@
+.custom-menubar {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.logo-container:hover {
+  opacity: 0.8;
+}
+
+.cart-badge {
+  position: relative;
+}
+
+:host ::ng-deep .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-content .p-menuitem-link {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+:host ::ng-deep .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-content .p-menuitem-link:hover {
+  background-color: var(--primary-color);
+  color: var(--primary-color-text);
+}
+
+:host ::ng-deep .p-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .logo-container span {
+    display: none;
+  }
+}
