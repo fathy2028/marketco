@@ -29,3 +29,5 @@ export interface AuthResponse {
 export interface MessageResponse {
   message: string;
 }
+
+

@@ -111,3 +111,5 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         // Configuration properties can be added here if needed
     }
 }
+
+

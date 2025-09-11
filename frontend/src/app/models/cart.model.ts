@@ -46,3 +46,5 @@ export interface CartTtlUpdateRequest {
   userId: number;
   ttlType: CartTtlType;
 }
+
+

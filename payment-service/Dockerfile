@@ -21,3 +21,5 @@ COPY --from=build /app/out .
 EXPOSE 5002
 
 ENTRYPOINT ["dotnet", "payment-service.dll"]
+
+

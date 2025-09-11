@@ -15,3 +15,5 @@ namespace CartService.Services
         Task<Dictionary<string, object>> GetCartStatisticsAsync();
     }
 }
+
+

@@ -50,3 +50,5 @@ scrape_configs:
     metrics_path: "/metrics"
     static_configs:
       - targets: ["payment-service:5002"]
+
+

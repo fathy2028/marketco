@@ -60,3 +60,5 @@ namespace CartService.Models
         public CartTtlType TtlType { get; set; }
     }
 }
+
+
