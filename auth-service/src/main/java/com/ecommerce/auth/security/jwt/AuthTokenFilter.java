@@ -29,6 +29,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        // Skip JWT processing for signup and signin endpoints
+        String requestPath = request.getRequestURI();
+        if (requestPath.contains("/auth/signup") || requestPath.contains("/auth/signin")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
@@ -60,5 +68,3 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         return null;
     }
 }
-
-

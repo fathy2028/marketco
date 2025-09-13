@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class CartService {
-  private readonly API_URL = 'http://localhost:8080/api/cart';
+  private readonly API_URL = 'http://localhost:5001/api/cart';
   
   private cartSubject = new BehaviorSubject<Cart | null>(null);
   public cart$ = this.cartSubject.asObservable();
@@ -20,90 +20,74 @@ export class CartService {
     private http: HttpClient,
     private authService: AuthService
   ) {
-    // Load cart when user logs in
+    // Load cart for both authenticated and anonymous users
     this.authService.isAuthenticated$.subscribe(isAuth => {
-      if (isAuth) {
-        this.loadUserCart();
-      } else {
-        this.clearCart();
+      this.loadUserCart();
+    });
+    
+    // Also load cart on service initialization
+    this.loadUserCart();
+  }
+
+  private loadUserCart(): void {
+    // Use authenticated user ID or default to 1 for anonymous users
+    const userId = this.authService.isAuthenticated() ? 
+      (this.authService.getUser()?.id || 1) : 1;
+    
+    this.getCart(userId).subscribe({
+      next: (cart) => {
+        this.cartSubject.next(cart);
+        this.cartItemCountSubject.next(cart.totalItems);
+      },
+      error: (error) => {
+        console.error('Error loading cart:', error);
+        this.cartSubject.next(null);
+        this.cartItemCountSubject.next(0);
       }
     });
   }
 
-  private loadUserCart(): void {
-    const user = this.authService.getUser();
-    if (user) {
-      this.getCart(user.id).subscribe({
-        next: (cart) => {
-          this.cartSubject.next(cart);
-          this.cartItemCountSubject.next(cart.totalItems);
-        },
-        error: (error) => {
-          console.error('Error loading cart:', error);
-          this.cartSubject.next(null);
-          this.cartItemCountSubject.next(0);
-        }
-      });
-    }
-  }
-
   getCart(userId: number): Observable<Cart> {
-    return this.http.get<Cart>(`${this.API_URL}/${userId}`, {
-      headers: this.authService.getAuthHeaders()
-    });
+    return this.http.get<Cart>(`${this.API_URL}/${userId}`);
   }
 
   addToCart(request: AddToCartRequest): Observable<CartItem> {
-    return this.http.post<CartItem>(`${this.API_URL}/add`, request, {
-      headers: this.authService.getAuthHeaders()
-    }).pipe(
+    return this.http.post<CartItem>(`${this.API_URL}/add`, request).pipe(
       tap(() => this.loadUserCart())
     );
   }
 
   updateCartItem(userId: number, cartItemId: string, request: UpdateCartItemRequest): Observable<CartItem> {
-    return this.http.put<CartItem>(`${this.API_URL}/${userId}/items/${cartItemId}`, request, {
-      headers: this.authService.getAuthHeaders()
-    }).pipe(
+    return this.http.put<CartItem>(`${this.API_URL}/${userId}/items/${cartItemId}`, request).pipe(
       tap(() => this.loadUserCart())
     );
   }
 
   removeCartItem(userId: number, cartItemId: string): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/${userId}/items/${cartItemId}`, {
-      headers: this.authService.getAuthHeaders()
-    }).pipe(
+    return this.http.delete<void>(`${this.API_URL}/${userId}/items/${cartItemId}`).pipe(
       tap(() => this.loadUserCart())
     );
   }
 
   clearCart(userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/${userId}`, {
-      headers: this.authService.getAuthHeaders()
-    }).pipe(
-      tap(() => this.loadUserCart())
+    return this.http.delete<void>(`${this.API_URL}/${userId}`).pipe(
+      tap(() => this.clearLocalCart())
     );
   }
 
   updateCartTtl(request: CartTtlUpdateRequest): Observable<any> {
-    return this.http.post(`${this.API_URL}/${request.userId}/ttl`, request, {
-      headers: this.authService.getAuthHeaders()
-    });
+    return this.http.post(`${this.API_URL}/${request.userId}/ttl`, request);
   }
 
   getCartStatistics(): Observable<any> {
-    return this.http.get(`${this.API_URL}/statistics`, {
-      headers: this.authService.getAuthHeaders()
-    });
+    return this.http.get(`${this.API_URL}/statistics`);
   }
 
   checkoutCart(userId: number): Observable<any> {
-    return this.http.post(`${this.API_URL}/${userId}/checkout`, null, {
-      headers: this.authService.getAuthHeaders()
-    });
+    return this.http.post(`${this.API_URL}/${userId}/checkout`, null);
   }
 
-  private clearCart(): void {
+  private clearLocalCart(): void {
     this.cartSubject.next(null);
     this.cartItemCountSubject.next(0);
   }

@@ -1,9 +1,12 @@
 export interface Order {
+  id: number;
   orderId: number;
   userId: number;
   orderDate: Date;
+  createdAt: Date;
   status: OrderStatus;
   totalAmount: number;
+  items: OrderItem[];
   orderItems: OrderItem[];
   shippingAddress?: string;
   billingAddress?: string;

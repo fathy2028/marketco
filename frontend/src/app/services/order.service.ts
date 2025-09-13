@@ -44,6 +44,12 @@ export class OrderService {
     });
   }
 
+  getUserOrders(userId: number): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.API_URL}/user/${userId}`, {
+      headers: this.authService.getAuthHeaders()
+    });
+  }
+
   getOrdersByStatus(status: OrderStatus): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.API_URL}/status/${status}`, {
       headers: this.authService.getAuthHeaders()

@@ -1,0 +1,76 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>My Profile</h1>
+    <p>Manage your account information</p>
+  </div>
+
+  <div class="profile-content">
+    <p-card>
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <div class="field">
+            <label for="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              pInputText
+              formControlName="username"
+              placeholder="Enter username"
+              class="w-full"
+            />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              placeholder="Enter email"
+              class="w-full"
+            />
+          </div>
+
+          <div class="field">
+            <label for="firstName">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              pInputText
+              formControlName="firstName"
+              placeholder="Enter first name"
+              class="w-full"
+            />
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input
+              id="lastName"
+              type="text"
+              pInputText
+              formControlName="lastName"
+              placeholder="Enter last name"
+              class="w-full"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <p-button
+            type="submit"
+            label="Update Profile"
+            icon="pi pi-save"
+            [loading]="loading"
+            [disabled]="!profileForm.valid"
+          >
+          </p-button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>
+
+<p-toast></p-toast>
+

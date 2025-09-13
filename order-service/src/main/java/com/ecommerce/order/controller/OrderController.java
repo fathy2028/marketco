@@ -21,7 +21,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-@CrossOrigin(origins = "*")
 @Tag(name = "Orders", description = "Order Management API")
 public class OrderController {
 
@@ -140,5 +139,3 @@ public class OrderController {
         return ResponseEntity.notFound().build();
     }
 }
-
-

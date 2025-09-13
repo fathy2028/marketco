@@ -4,15 +4,16 @@ server:
 spring:
   application:
     name: discovery-service
-  config:
-    import: configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+  cloud:
+    config:
+      enabled: false
 
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://0.0.0.0:8761/eureka/
   server:
     enable-self-preservation: false
 

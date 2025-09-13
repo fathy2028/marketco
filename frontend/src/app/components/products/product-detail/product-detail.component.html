@@ -1,0 +1,66 @@
+<div class="product-detail-container" *ngIf="product">
+  <div class="product-detail-content">
+    <div class="product-image-section">
+      <img
+        [src]="product.imageUrl || 'assets/images/product-placeholder.jpg'"
+        [alt]="product.name"
+        class="product-image"
+        onerror="this.src='assets/images/product-placeholder.jpg'"
+      />
+    </div>
+
+    <div class="product-info-section">
+      <h1 class="product-title">{{ product.name }}</h1>
+      <p class="product-category">{{ product.category }}</p>
+      <p class="product-description">{{ product.description }}</p>
+
+      <div class="product-price">
+        <span class="price">${{ product.price | number : "1.2-2" }}</span>
+        <span
+          class="stock"
+          [class.in-stock]="product.stock > 0"
+          [class.out-of-stock]="product.stock === 0"
+        >
+          {{ product.stock > 0 ? "In Stock" : "Out of Stock" }}
+        </span>
+      </div>
+
+      <div class="product-actions">
+        <div class="quantity-selector">
+          <p-button
+            icon="pi pi-minus"
+            [disabled]="quantity <= 1"
+            (click)="updateQuantity(-1)"
+          >
+          </p-button>
+          <span class="quantity">{{ quantity }}</span>
+          <p-button
+            icon="pi pi-plus"
+            [disabled]="quantity >= product.stock"
+            (click)="updateQuantity(1)"
+          >
+          </p-button>
+        </div>
+
+        <p-button
+          label="Add to Cart"
+          icon="pi pi-shopping-cart"
+          [disabled]="product.stock === 0"
+          (click)="addToCart()"
+          size="large"
+        >
+        </p-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="loading-container">
+  <p-progressSpinner></p-progressSpinner>
+  <p>Loading product...</p>
+</div>
+
+<div *ngIf="error" class="error-container">
+  <p-message severity="error" [text]="error"></p-message>
+</div>
+

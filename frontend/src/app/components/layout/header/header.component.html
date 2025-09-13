@@ -13,18 +13,14 @@
   <ng-template pTemplate="end">
     <div class="flex align-items-center gap-3">
       <!-- Cart Icon with Badge -->
-      <div
-        *ngIf="isAuthenticated"
-        class="cart-badge"
-        (click)="goToCart()"
-        style="cursor: pointer"
-      >
+      <div class="cart-badge" style="cursor: pointer">
         <p-button
           icon="pi pi-shopping-cart"
           [text]="true"
           [rounded]="true"
           severity="secondary"
           class="relative"
+          (click)="goToCart()"
         >
         </p-button>
         <p-badge

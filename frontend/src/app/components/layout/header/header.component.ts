@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private cartService: CartService,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit() {
@@ -90,15 +90,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goToCart() {
-    if (this.isAuthenticated) {
-      this.router.navigate(['/cart']);
-    } else {
-      this.router.navigate(['/auth/login']);
-    }
+    console.log('Navigating to cart page');
+    this.router.navigateByUrl('/cart').then(success => {
+      if (!success) {
+        console.error('Navigation failed - using fallback');
+        window.location.href = '/cart';
+      }
+    }).catch(error => {
+      console.error('Navigation error:', error);
+      window.location.href = '/cart';
+    });
   }
 
   goToLogin() {
     this.router.navigate(['/auth/login']);
   }
 }
+
 

@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin(origins = "*")
 @Tag(name = "Products", description = "Product Management API")
 public class ProductController {
 
@@ -121,5 +120,3 @@ public class ProductController {
         return ResponseEntity.badRequest().body("Failed to release stock");
     }
 }
-
-

@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
-    @Value("${jwt.secret}")
+    @Value("${JWT_SECRET:mySecretKey123456789012345678901234567890123456789012345678901234567890}")
     private String jwtSecret;
 
     public JwtAuthenticationFilter() {
@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
+        byte[] keyBytes = jwtSecret.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -101,6 +101,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         // Public endpoints that don't require authentication
         return !path.startsWith("/auth/") &&
                 !path.startsWith("/products") &&
+                !path.startsWith("/cart") &&
                 !path.startsWith("/actuator") &&
                 !path.startsWith("/swagger-ui") &&
                 !path.startsWith("/v3/api-docs") &&
@@ -111,5 +112,3 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         // Configuration properties can be added here if needed
     }
 }
-
-

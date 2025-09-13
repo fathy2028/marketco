@@ -20,6 +20,7 @@ import { BadgeModule } from 'primeng/badge';
 import { DividerModule } from 'primeng/divider';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { MessageModule } from 'primeng/message';
 
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
@@ -64,7 +65,8 @@ const routes: Routes = [
     BadgeModule,
     DividerModule,
     ConfirmDialogModule,
-    DialogModule
+    DialogModule,
+    MessageModule
   ]
 })
 export class ProductsModule { }

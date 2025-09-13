@@ -33,23 +33,14 @@ export class ProductCardComponent {
   addToCart(event: Event) {
     event.stopPropagation();
     
-    if (!this.authService.isAuthenticated()) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Login Required',
-        detail: 'Please login to add items to cart'
-      });
-      this.router.navigate(['/auth/login']);
-      return;
-    }
-
-    const user = this.authService.getUser();
-    if (!user) return;
+    // Use a default user ID for anonymous users (you can implement session-based cart later)
+    const userId = this.authService.isAuthenticated() ? 
+      (this.authService.getUser()?.id || 1) : 1;
 
     this.addingToCart = true;
     
     const request: AddToCartRequest = {
-      userId: user.id,
+      userId: userId,
       productId: this.product.productId,
       quantity: 1,
       price: this.product.price,
@@ -78,7 +69,7 @@ export class ProductCardComponent {
     });
   }
 
-  getStockSeverity(): string {
+  getStockSeverity(): 'success' | 'info' | 'warning' | 'danger' | 'secondary' | 'contrast' {
     if (this.product.stock === 0) return 'danger';
     if (this.product.stock < 10) return 'warning';
     return 'success';
@@ -92,5 +83,10 @@ export class ProductCardComponent {
 
   isOutOfStock(): boolean {
     return this.product.stock === 0;
+  }
+
+  getPlaceholderImage(): string {
+    // Return a simple SVG placeholder as data URL
+    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMDAgNzVMMTI1IDEwMEgxMDBWNzVaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik0xMDAgMTI1TDEyNSAxMDBIMTAwVjEyNVoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTEwMCA3NUw3NSAxMDBIMTAwVjc1WiIgZmlsbD0iIzlDQTNBRiIvPgo8cGF0aCBkPSJNMTAwIDEyNUw3NSAxMDBIMTAwVjEyNVoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB4PSI4NSIgeT0iODUiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSIxNSIgY3k9IjE1IiByPSIxMiIgZmlsbD0iI0Q5RURGQyIvPgo8cGF0aCBkPSJNMTUgMTBMMTggMTNIMTVWMTBaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik0xNSAyMEwxOCAxN0gxNVYyMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTE1IDEwTDEyIDEzSDE1VjEwWiIgZmlsbD0iIzlDQTNBRiIvPgo8cGF0aCBkPSJNMTUgMjBMMTIgMTdIMTVWMjBaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K';
   }
 }

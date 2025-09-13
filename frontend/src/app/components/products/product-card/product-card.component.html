@@ -6,10 +6,10 @@
   <ng-template pTemplate="header">
     <div class="product-image-container">
       <img
-        [src]="product.imageUrl || 'assets/images/product-placeholder.jpg'"
+        [src]="product.imageUrl || getPlaceholderImage()"
         [alt]="product.name"
         class="product-image"
-        onerror="this.src='assets/images/product-placeholder.jpg'"
+        onerror="this.src=getPlaceholderImage()"
       />
       <div class="product-overlay">
         <p-button

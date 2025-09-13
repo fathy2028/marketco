@@ -1,0 +1,71 @@
+<div class="orders-container">
+  <div class="orders-header">
+    <h1>My Orders</h1>
+    <p>Track and manage your orders</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Loading orders...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <p-message severity="error" [text]="error"></p-message>
+    <p-button label="Retry" (click)="loadOrders()"></p-button>
+  </div>
+
+  <div *ngIf="!loading && !error && orders.length > 0" class="orders-list">
+    <p-card *ngFor="let order of orders" class="order-card">
+      <div class="order-header">
+        <div class="order-info">
+          <h3>Order #{{ order.id }}</h3>
+          <p class="order-date">{{ order.createdAt | date : "medium" }}</p>
+        </div>
+        <div class="order-status">
+          <p-tag
+            [value]="order.status"
+            [severity]="getStatusSeverity(order.status)"
+          >
+          </p-tag>
+        </div>
+      </div>
+
+      <div class="order-items">
+        <div *ngFor="let item of order.items" class="order-item">
+          <div class="item-info">
+            <span class="item-name">{{ item.productName }}</span>
+            <span class="item-quantity">x{{ item.quantity }}</span>
+          </div>
+          <div class="item-price">${{ item.price | number : "1.2-2" }}</div>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="order-footer">
+        <div class="order-total">
+          <span>Total: ${{ order.totalAmount | number : "1.2-2" }}</span>
+        </div>
+        <div class="order-actions">
+          <p-button label="View Details" icon="pi pi-eye" [text]="true">
+          </p-button>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <div *ngIf="!loading && !error && orders.length === 0" class="empty-orders">
+    <div class="empty-orders-content">
+      <i class="pi pi-shopping-bag empty-orders-icon"></i>
+      <h2>No orders yet</h2>
+      <p>Start shopping to see your orders here!</p>
+      <p-button
+        label="Start Shopping"
+        icon="pi pi-shopping-bag"
+        routerLink="/products"
+      >
+      </p-button>
+    </div>
+  </div>
+</div>
+

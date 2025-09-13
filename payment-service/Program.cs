@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using PaymentService.Data;
 using PaymentService.Services;
 using Prometheus;
-using Steeltoe.Discovery.Client;
-using Steeltoe.Extensions.Configuration.ConfigServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -11,10 +9,20 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add configuration
-builder.Configuration.AddConfigServer();
 
 // Add services to the container
 builder.Services.AddControllers();
+
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -82,8 +90,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Add service discovery
-builder.Services.AddDiscoveryClient();
+// Service discovery removed for simplicity
 
 // Register custom services
 builder.Services.AddScoped<IPaymentService, PaymentService.Services.PaymentService>();
@@ -101,6 +108,10 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Configure port
+var port = builder.Configuration["Eureka:Instance:Port"] ?? "5002";
+app.Urls.Add($"http://0.0.0.0:{port}");
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())

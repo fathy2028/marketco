@@ -1,0 +1,26 @@
+<div class="product-list-container">
+  <div class="product-list-header">
+    <h1>Products</h1>
+    <p>Discover our amazing collection of products</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Loading products...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <p-message severity="error" [text]="error"></p-message>
+    <p-button label="Retry" (click)="loadProducts()"></p-button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="product-grid">
+    <app-product-card
+      *ngFor="let product of products"
+      [product]="product"
+      (productClick)="onProductClick($event)"
+    >
+    </app-product-card>
+  </div>
+</div>
+

@@ -1,5 +1,46 @@
+server:
+  port: 8082
+
 spring:
   application:
     name: product-service
   config:
-    import: configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+    import: optional:configserver:http://config-server:8888
+  cloud:
+    config:
+      enabled: true
+      uri: http://config-server:8888
+  datasource:
+    url: jdbc:mysql://mysql-product-db:3306/productdb
+    username: product_user
+    password: product_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  rabbitmq:
+    host: rabbitmq-broker
+    port: 5672
+    username: rabbitmq_user
+    password: rabbitmq_password
+    virtual-host: /
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  instance:
+    prefer-ip-address: true

@@ -17,6 +17,10 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
   constructor(private http: HttpClient) {
     this.loadUserFromStorage();
   }

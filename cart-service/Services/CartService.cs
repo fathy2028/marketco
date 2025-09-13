@@ -41,7 +41,7 @@ namespace CartService.Services
 
                 var tasks = itemKeys.Select(async key =>
                 {
-                    var itemJson = await _database.StringGetAsync(key);
+                    var itemJson = await _database.StringGetAsync(key.ToString());
                     if (itemJson.HasValue)
                     {
                         return JsonConvert.DeserializeObject<CartItem>(itemJson);
@@ -111,7 +111,7 @@ namespace CartService.Services
 
                 // Add to user's cart set
                 await _database.SetAddAsync(cartKey, cartItem.RedisKey);
-                await _database.ExpireAsync(cartKey, DefaultTtl);
+                await _database.KeyExpireAsync(cartKey, DefaultTtl);
 
                 // Publish cart event
                 await _rabbitMQService.PublishCartEventAsync("cart.item.added", cartItem);
@@ -259,11 +259,11 @@ namespace CartService.Services
                 // Update cart set TTL
                 if (newTtl.HasValue)
                 {
-                    await _database.ExpireAsync(cartKey, newTtl);
+                    await _database.KeyExpireAsync(cartKey, newTtl);
                 }
                 else
                 {
-                    await _database.PersistAsync(cartKey); // Remove expiration
+                    await _database.KeyPersistAsync(cartKey); // Remove expiration
                 }
 
                 // Publish TTL update event

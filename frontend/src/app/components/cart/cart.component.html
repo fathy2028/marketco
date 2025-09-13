@@ -1,0 +1,135 @@
+<div class="cart-container">
+  <div class="cart-header">
+    <h1>Shopping Cart</h1>
+    <p *ngIf="cart && cart.items && cart.items.length > 0">
+      {{ getTotalItems() }} item(s) in your cart
+    </p>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Loading cart...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <p-message severity="error" [text]="error"></p-message>
+    <p-button label="Retry" (click)="loadCart()"></p-button>
+  </div>
+
+  <div
+    *ngIf="!loading && !error && cart && cart.items && cart.items.length > 0"
+    class="cart-content"
+  >
+    <div class="cart-items">
+      <p-card *ngFor="let item of cart.items" class="cart-item">
+        <div class="item-content">
+          <div class="item-image">
+            <img
+              [src]="item.imageUrl || getPlaceholderImage()"
+              [alt]="item.name"
+              class="product-image"
+              onerror="this.src=getPlaceholderImage()"
+            />
+          </div>
+
+          <div class="item-details">
+            <h3 class="item-name">{{ item.productName || item.name }}</h3>
+            <p class="item-description">{{ item.productDescription }}</p>
+            <p class="item-price">${{ item.price | number : "1.2-2" }}</p>
+          </div>
+
+          <div class="item-quantity">
+            <p-inputNumber
+              [ngModel]="item.quantity"
+              [min]="1"
+              [max]="999"
+              (onInput)="updateQuantity(item, +($event.value || 1))"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            >
+            </p-inputNumber>
+          </div>
+
+          <div class="item-total">
+            <span class="total-price"
+              >${{ item.price * item.quantity | number : "1.2-2" }}</span
+            >
+          </div>
+
+          <div class="item-actions">
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [text]="true"
+              (click)="removeItem(item)"
+              pTooltip="Remove item"
+            >
+            </p-button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="cart-summary">
+      <p-card>
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Items ({{ getTotalItems() }})</span>
+          <span>${{ getTotalPrice() | number : "1.2-2" }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>Free</span>
+        </div>
+        <p-divider></p-divider>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>${{ getTotalPrice() | number : "1.2-2" }}</span>
+        </div>
+
+        <div class="checkout-actions">
+          <p-button
+            label="Proceed to Checkout"
+            icon="pi pi-credit-card"
+            size="large"
+            styleClass="w-full"
+          >
+          </p-button>
+          <p-button
+            label="Clear Cart"
+            icon="pi pi-trash"
+            severity="danger"
+            [text]="true"
+            (click)="clearCart()"
+            styleClass="w-full"
+          >
+          </p-button>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <div
+    *ngIf="
+      !loading && !error && (!cart || !cart.items || cart.items.length === 0)
+    "
+    class="empty-cart"
+  >
+    <div class="empty-cart-content">
+      <i class="pi pi-shopping-cart empty-cart-icon"></i>
+      <h2>Your cart is empty</h2>
+      <p>Add some products to get started!</p>
+      <p-button
+        label="Continue Shopping"
+        icon="pi pi-shopping-bag"
+        routerLink="/products"
+      >
+      </p-button>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

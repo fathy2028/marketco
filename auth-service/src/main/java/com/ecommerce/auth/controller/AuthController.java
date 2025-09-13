@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Authentication", description = "Authentication API")
+
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -115,5 +115,3 @@ public class AuthController {
         }
     }
 }
-
-

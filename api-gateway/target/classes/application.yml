@@ -1,7 +1,63 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: api-gateway
   config:
-    import: configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+    import: configserver:http://config-server:8888
+  cloud:
+    config:
+      enabled: true
+      uri: http://config-server:8888
+    gateway:
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=2
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/products/**
+          filters:
+            - StripPrefix=2
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=2
+        - id: cart-service
+          uri: http://cart-service:5001
+          predicates:
+            - Path=/api/cart/**
+          filters:
+            - StripPrefix=2
+        - id: payment-service
+          uri: http://payment-service:5002
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - StripPrefix=2
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  instance:
+    prefer-ip-address: true
 
+jwt:
+  secret: mySecretKey123456789012345678901234567890123456789012345678901234567890
