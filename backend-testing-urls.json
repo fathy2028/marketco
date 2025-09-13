@@ -80,14 +80,23 @@
         "port": 3000,
         "status": "running",
         "dashboard": "http://localhost:3000",
-        "description": "Metrics visualization and dashboards"
+        "description": "Metrics visualization and dashboards",
+        "credentials": {
+          "username": "admin",
+          "password": "admin",
+          "note": "You'll be prompted to change password on first login"
+        }
       },
       "rabbitmq": {
         "name": "RabbitMQ",
         "port": 15672,
         "status": "running",
         "management": "http://localhost:15672",
-        "description": "Message broker management interface"
+        "description": "Message broker management interface",
+        "credentials": {
+          "username": "rabbitmq_user",
+          "password": "rabbitmq_password"
+        }
       }
     },
     "key_endpoints": {
@@ -213,6 +222,64 @@
         "port": 1433,
         "database": "payment_db",
         "description": "Payment service database"
+      }
+    },
+    "all_credentials": {
+      "monitoring_services": {
+        "grafana": {
+          "url": "http://localhost:3000",
+          "username": "admin",
+          "password": "admin",
+          "note": "Default admin credentials - change on first login"
+        },
+        "rabbitmq_management": {
+          "url": "http://localhost:15672",
+          "username": "rabbitmq_user",
+          "password": "rabbitmq_password"
+        },
+        "prometheus": {
+          "url": "http://localhost:9090",
+          "note": "No authentication required"
+        }
+      },
+      "databases": {
+        "mysql_product": {
+          "host": "localhost:3306",
+          "database": "productdb",
+          "username": "product_user",
+          "password": "product_password",
+          "root_password": "rootpassword"
+        },
+        "postgres_auth": {
+          "host": "localhost:5432",
+          "database": "authdb",
+          "username": "auth_user",
+          "password": "auth_password"
+        },
+        "postgres_order": {
+          "host": "localhost:5433",
+          "database": "orderdb",
+          "username": "order_user",
+          "password": "order_password"
+        },
+        "sqlserver_payment": {
+          "host": "localhost:1433",
+          "database": "PaymentDB",
+          "username": "sa",
+          "password": "PaymentPassword123!"
+        },
+        "redis_cache": {
+          "host": "localhost:6379",
+          "note": "No authentication configured"
+        }
+      },
+      "messaging": {
+        "rabbitmq": {
+          "host": "localhost:5672",
+          "username": "rabbitmq_user",
+          "password": "rabbitmq_password",
+          "note": "For application connections (not management UI)"
+        }
       }
     },
     "testing_workflow": {
