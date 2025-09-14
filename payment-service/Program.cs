@@ -13,16 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-// Add CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -74,7 +64,9 @@ builder.Services.AddDbContext<PaymentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add JWT Authentication
-var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "mySecretKey123456789012345678901234567890";
+var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET") ??
+                 builder.Configuration["Jwt:Secret"] ??
+                 "mySecretKey123456789012345678901234567890123456789012345678901234567890";
 var key = Encoding.ASCII.GetBytes(jwtSecret);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -114,19 +106,26 @@ var port = builder.Configuration["Eureka:Instance:Port"] ?? "5002";
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseRouting();
 app.UseCors("AllowAll");
+
+// Enable Swagger for all environments to allow API testing
+app.UseSwagger(c =>
+{
+    c.SerializeAsV2 = false;
+});
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "E-commerce Payment Service API v1");
+    c.RoutePrefix = "swagger"; // Swagger UI will be available at /swagger
+    c.EnableDeepLinking();
+    c.DisplayOperationId();
+});
 
 // Add Prometheus metrics
 app.UseMetricServer();
 app.UseHttpMetrics();
 
-app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 

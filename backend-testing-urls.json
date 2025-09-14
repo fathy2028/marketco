@@ -283,13 +283,111 @@
       }
     },
     "testing_workflow": {
-      "step_1": "Start with API Gateway Swagger: http://localhost:8080/swagger-ui/index.html",
-      "step_2": "Test authentication endpoints: signup and signin",
-      "step_3": "Use JWT token for authenticated requests",
-      "step_4": "Test product endpoints",
-      "step_5": "Test cart operations",
-      "step_6": "Test order creation and retrieval",
-      "step_7": "Test payment processing"
+      "note": "✅ Swagger UI is now working for .NET services! Java services use direct endpoints:",
+      "step_1": "Test authentication: POST http://localhost:8080/api/auth/signup and signin",
+      "step_2": "Test products: GET http://localhost:8080/api/products",
+      "step_3": "Test cart operations: http://localhost:5001/api/cart/{userId}",
+      "step_4": "Test orders: http://localhost:8080/api/orders",
+      "step_5": "Test payments: http://localhost:5002/api/payments",
+      "step_6": "Use health endpoints for service status checks",
+      "step_7": "All endpoints return JSON responses - test with curl, Postman, or similar tools"
+    },
+    "working_api_endpoints": {
+      "authentication": {
+        "base_url": "http://localhost:8080/api/auth",
+        "signup": {
+          "method": "POST",
+          "url": "http://localhost:8080/api/auth/signup",
+          "sample_request": {
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "password123",
+            "role": ["admin"]
+          }
+        },
+        "signin": {
+          "method": "POST", 
+          "url": "http://localhost:8080/api/auth/signin",
+          "sample_request": {
+            "username": "testuser",
+            "password": "password123"
+          }
+        }
+      },
+      "products": {
+        "base_url": "http://localhost:8080/api/products",
+        "get_all": {
+          "method": "GET",
+          "url": "http://localhost:8080/api/products",
+          "description": "Returns paginated product list - currently working ✅"
+        },
+        "get_by_id": {
+          "method": "GET",
+          "url": "http://localhost:8080/api/products/{id}",
+          "description": "Get specific product by ID"
+        }
+      },
+      "cart": {
+        "base_url": "http://localhost:5001/api/cart",
+        "swagger_ui": "http://localhost:5001/swagger/index.html ✅ WORKING",
+        "get_cart": {
+          "method": "GET",
+          "url": "http://localhost:5001/api/cart/{userId}",
+          "description": "Get user cart - currently working ✅"
+        },
+        "add_item": {
+          "method": "POST",
+          "url": "http://localhost:5001/api/cart/add",
+          "sample_request": {
+            "userId": 1,
+            "productId": 1,
+            "quantity": 2
+          }
+        }
+      },
+      "orders": {
+        "base_url": "http://localhost:8080/api/orders",
+        "get_orders": {
+          "method": "GET",
+          "url": "http://localhost:8080/api/orders",
+          "description": "Get user orders (requires authentication)"
+        },
+        "create_order": {
+          "method": "POST", 
+          "url": "http://localhost:8080/api/orders",
+          "description": "Create new order from cart"
+        }
+      },
+      "payments": {
+        "base_url": "http://localhost:5002/api/payments",
+        "swagger_ui": "http://localhost:5002/swagger/index.html ✅ WORKING",
+        "process_payment": {
+          "method": "POST",
+          "url": "http://localhost:5002/api/payment/process",
+          "sample_request": {
+            "orderId": 1,
+            "userId": 1,
+            "amount": 1119.95,
+            "paymentMethod": "credit_card",
+            "paymentGateway": "stripe",
+            "currency": "USD",
+            "notes": "Test payment for cart checkout"
+          }
+        },
+        "health": {
+          "method": "GET",
+          "url": "http://localhost:5002/api/payment/health",
+          "description": "Payment service health check"
+        }
+      }
+    },
+    "health_endpoints": {
+      "api_gateway": "http://localhost:8080/actuator/health",
+      "auth_service": "http://localhost:8081/actuator/health", 
+      "product_service": "http://localhost:8082/actuator/health",
+      "order_service": "http://localhost:8083/actuator/health",
+      "cart_service": "http://localhost:5001/health",
+      "payment_service": "http://localhost:5002/health"
     },
     "frontend_application": {
       "url": "http://localhost:4200",

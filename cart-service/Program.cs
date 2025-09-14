@@ -10,16 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-// Add CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -98,19 +88,26 @@ var port = builder.Configuration["Eureka:Instance:Port"] ?? "5001";
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseRouting();
 app.UseCors("AllowAll");
+
+// Enable Swagger for all environments to allow API testing
+app.UseSwagger(c =>
+{
+    c.SerializeAsV2 = false;
+});
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "E-commerce Cart Service API v1");
+    c.RoutePrefix = "swagger"; // Swagger UI will be available at /swagger
+    c.EnableDeepLinking();
+    c.DisplayOperationId();
+});
 
 // Add Prometheus metrics
 app.UseMetricServer();
 app.UseHttpMetrics();
 
-app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();

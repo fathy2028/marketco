@@ -246,6 +246,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       CONFIG_SERVER_URL: http://config-server:8888
       EUREKA_SERVER_URL: http://discovery-service:8761/eureka
+      JWT_SECRET: mySecretKey123456789012345678901234567890123456789012345678901234567890
     depends_on:
       - config-server
       - discovery-service
@@ -291,6 +292,7 @@ services:
       RabbitMQ__Username: rabbitmq_user
       RabbitMQ__Password: rabbitmq_password
       Eureka__ServiceUrl: http://discovery-service:8761/eureka
+      JWT_SECRET: mySecretKey123456789012345678901234567890123456789012345678901234567890
     depends_on:
       - sqlserver
       - rabbitmq
